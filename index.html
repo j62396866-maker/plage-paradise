@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PinkPlage · Pink Paradise</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { width:100%; height:100%; overflow:hidden; background:#000; }
+
+    iframe {
+      width:100%;
+      height:100%;
+      border:none;
+      display:block;
+    }
+
+    #fallback {
+      display:none;
+      position:fixed;
+      inset:0;
+      background:#0a0a0f;
+      color:#e8e0f0;
+      font-family:monospace;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:1.5rem;
+      text-align:center;
+      padding:2rem;
+    }
+    #fallback.on { display:flex; }
+    #fallback p { color:#7a7a9a; font-size:.82rem; line-height:1.9; }
+    #fallback a {
+      background:#ff2d78;
+      color:#fff;
+      text-decoration:none;
+      padding:.8rem 2rem;
+      border-radius:8px;
+      font-size:.82rem;
+      font-weight:700;
+    }
+  </style>
+</head>
+<body>
+
+  <iframe
+    id="fr"
+    src="https://tuto-bechamel.my.canva.site/plage-avril"
+    sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-downloads allow-top-navigation"
+    referrerpolicy="no-referrer-when-downgrade"
+  ></iframe>
+
+  <div id="fallback">
+    <div style="font-size:2.5rem">🚫</div>
+    <p>
+      <strong>Iframe bloquée</strong><br/>
+      webhooky.base44.app refuse d'être chargée ici.<br/>
+      (X-Frame-Options / CSP)
+    </p>
+    <a href="https://tuto-bechamel.my.canva.site/plage-avril target="_blank">Ouvrir directement →</a>
+  </div>
+
+  <script>
+    // Timeout fallback : si l'iframe ne charge pas en 8s
+    const fr = document.getElementById('fr');
+    const fb = document.getElementById('fallback');
+
+    const t = setTimeout(() => {
+      try {
+        const d = fr.contentDocument;
+        if (!d || !d.body || d.body.innerHTML.trim() === '') fb.classList.add('on');
+      } catch { /* cross-origin = probablement ok */ }
+    }, 8000);
+
+    fr.addEventListener('load', () => clearTimeout(t));
+    fr.addEventListener('error', () => { clearTimeout(t); fb.classList.add('on'); });
+  </script>
+
+</body>
+</html>
